@@ -1,9 +1,14 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
+  Libraries,
+} from "@react-google-maps/api";
 import { Input } from "@chakra-ui/react";
 
-const libraries = ["places"];
+const libraries: Libraries = ["places"];
 
 interface MapWithAutocompleteProps {
   mapCenter: { lat: number; lng: number };
