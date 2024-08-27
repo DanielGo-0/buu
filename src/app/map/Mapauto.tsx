@@ -12,12 +12,10 @@ const libraries: Libraries = ["places"];
 
 interface MapWithAutocompleteProps {
   mapCenter: { lat: number; lng: number };
-  setMapCenter: (center: { lat: number; lng: number }) => void;
 }
 
 const MapWithAutocomplete: React.FC<MapWithAutocompleteProps> = ({
   mapCenter,
-  setMapCenter,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [address, setAddress] = useState<string>("");
@@ -36,20 +34,8 @@ const MapWithAutocomplete: React.FC<MapWithAutocompleteProps> = ({
           types: ["geocode"], // Allows a broad range of address types
         }
       );
-
-      autocompleteInstance.addListener("place_changed", () => {
-        const place = autocompleteInstance.getPlace();
-        if (place.geometry) {
-          const newCenter = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-          };
-          setMapCenter(newCenter);
-          setAddress(place.formatted_address || "");
-        }
-      });
     }
-  }, [isLoaded, setMapCenter]);
+  }, [isLoaded, mapCenter]);
 
   if (loadError) {
     return <div>Error loading Google Maps</div>;

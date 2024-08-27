@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import Image from "next/image";
 import {
   Box,
   Button,
@@ -134,10 +133,11 @@ const Page: React.FC<PageProps> = ({ setMapCenter }) => {
 
       autocompleteInstance.addListener("place_changed", () => {
         const place = autocompleteInstance.getPlace();
-        if (place.geometry) {
+        if (place.geometry && place.geometry.location) {
+          const location = place.geometry.location;
           setMapCenter({
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
+            lat: location.lat(),
+            lng: location.lng(),
           });
           // Get the address and set it to both local state and parent state
           const formattedAddress = place.formatted_address || "";
@@ -217,7 +217,7 @@ const Page: React.FC<PageProps> = ({ setMapCenter }) => {
           </ul>
         )}
       </form>
-      <Text color="white" w="60%" textAlign="center">
+      <Box color="white" w="60%" textAlign="center">
         <Text color="red" mb={50} fontSize="lg">
           --DATABASE--
         </Text>
@@ -229,7 +229,7 @@ const Page: React.FC<PageProps> = ({ setMapCenter }) => {
               </Box>
             ))
           : ""}
-      </Text>
+      </Box>
     </Box>
   );
 };
