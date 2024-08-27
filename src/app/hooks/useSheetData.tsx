@@ -29,7 +29,7 @@ export const useSheetData = (tabName: types, range: types) => {
   const handleSubmit = async () => {
     try {
       const nextRow = data.length + 1;
-      const rangeToUpdate = `A${nextRow}:D${nextRow}`;
+      const rangeToUpdate = `A${nextRow}:Z${nextRow}`;
       await updateData(tabName, rangeToUpdate as any, [newData] as any);
       setNewData(["", "", "", ""]);
       setErrors([]);

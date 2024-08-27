@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Box, Input, List, ListItem, FormLabel } from "@chakra-ui/react";
 
-const AutocompleteInput = ({ options }: any) => {
+const AutocompleteInput = ({ options, handleValue }: any) => {
   const [inputValue, setInputValue] = useState("");
   const [filteredOptions, setFilteredOptions] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false);
@@ -19,7 +19,8 @@ const AutocompleteInput = ({ options }: any) => {
   };
 
   const handleOptionClick = (option: string) => {
-    setInputValue(option); // Set the input value to the clicked option
+    setInputValue(option); // Set the input value to the clicked option}
+    handleValue(4, option);
     setFilteredOptions([]); // Clear the filtered options
     setIsFocused(false); // Hide the list when an option is clicked
   };
@@ -29,11 +30,14 @@ const AutocompleteInput = ({ options }: any) => {
       <FormLabel color="white">Marcas</FormLabel>
 
       <Input
+        isRequired
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={(e) => {
+          handleInputChange(e); // Call the function correctly
+        }}
         placeholder="Busca marcas..."
         bg="white"
-        textColor="black"
+        color="black" // Use 'color' instead of 'textColor'
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />

@@ -5,7 +5,6 @@ import { Box, Button, Input, Select, Text } from "@chakra-ui/react";
 import { useJsApiLoader, Libraries } from "@react-google-maps/api";
 import { useSheetData } from "../hooks/useSheetData";
 import AutocompleteInput from "./autocompleteInput";
-import { types } from "../services/sheetService";
 
 const Page = ({ setMapCenter }: any) => {
   const tabName = "Hoja 2" as any;
@@ -27,6 +26,9 @@ const Page = ({ setMapCenter }: any) => {
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries,
   });
+  function name(ix: any, vl: any) {
+    handleChange(4, vl);
+  }
 
   useEffect(() => {
     if (isLoaded && window.google) {
@@ -139,8 +141,6 @@ const Page = ({ setMapCenter }: any) => {
               mt="5px"
               placeholder={label}
               bg="white"
-              color="white"
-              variant="filled"
               type="text"
               onChange={(e) => handleChange(index, e.target.value)}
             />
@@ -153,24 +153,26 @@ const Page = ({ setMapCenter }: any) => {
           placeholder="Oferta %"
           onChange={(e) => handleChange(2, e.target.value)}
           value={newData[2]}
+          isRequired
         >
-          <option value="10">10 %</option>
-          <option value="20">20 %</option>
-          <option value="30">30 %</option>
-          <option value="40">40 %</option>
-          <option value="50">50 %</option>
+          <option value="10%">10 %</option>
+          <option value="20%">20 %</option>
+          <option value="30%">30 %</option>
+          <option value="40%">40 %</option>
+          <option value="50%">50 %</option>
         </Select>
         <Box m="20px 0">
           <label style={{ color: "white" }}>Modelos</label>
           <Input
+            isRequired
             mt="5px"
             bg="white"
-            variant="filled"
             type="text"
-            color="white"
+            color="black"
+            onChange={(e) => handleChange(3, e.target.value)}
           />
         </Box>
-        <AutocompleteInput options={options} />
+        <AutocompleteInput options={options} handleValue={name} />
 
         <Button mt="25px" type="submit" colorScheme="red" w="full">
           Añadir Item
