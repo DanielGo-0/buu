@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import MapWithAutocomplete from "./Mapauto";
-import Page from "./excel";
+import MapWithAutocomplete from "./Map";
+import Page from "./FormLoader";
 import { Box } from "@chakra-ui/react";
 import Nav from "../Nav";
 
