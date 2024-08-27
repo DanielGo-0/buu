@@ -10,7 +10,7 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader, Libraries } from "@react-google-maps/api";
 
 const tabName = "Hoja 2";
 const range = "A1:E1000";
@@ -116,7 +116,7 @@ const Page: React.FC<PageProps> = ({ setMapCenter }) => {
   const chunkedData = chunkArray(parsedData, 4);
 
   const [address, setAddress] = useState("");
-  const libraries = ["places"];
+  const libraries: Libraries = ["places"];
   const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,

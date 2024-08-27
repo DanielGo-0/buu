@@ -139,6 +139,7 @@ const Main = () => {
       <Show breakpoint="(min-width: 700px)">
         <Box>
           <Image
+            alt="empty"
             src="https://brand.assets.adidas.com/image/upload/f_auto,q_auto,fl_lossy/if_w_gt_1920,w_1920/mh_small_ar_21km_d_2e2cb97a2f.jpg"
             h={710}
             w={{ sm: 165, md: 172, lg: 179 }}
