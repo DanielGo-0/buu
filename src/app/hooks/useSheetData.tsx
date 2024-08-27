@@ -20,7 +20,7 @@ export const useSheetData = (tabName: types, range: types) => {
     loadData();
   }, [tabName, range]);
 
-  const handleChange = (index, value) => {
+  const handleChange = (index: number, value: string) => {
     const updatedData = [...newData];
     updatedData[index] = value;
     setNewData(updatedData);
@@ -30,23 +30,23 @@ export const useSheetData = (tabName: types, range: types) => {
     try {
       const nextRow = data.length + 1;
       const rangeToUpdate = `A${nextRow}:D${nextRow}`;
-      await updateData(tabName, rangeToUpdate, [newData]);
+      await updateData(tabName, rangeToUpdate as any, [newData] as any);
       setNewData(["", "", "", ""]);
       setErrors([]);
       const updatedData = await fetchData(tabName, range);
       setData(updatedData);
     } catch (error) {
-      setErrors(["Failed to submit data"]);
+      setErrors(["Failed to submit data"] as any);
     }
   };
 
   const handleClearRange = async (rangeToClear: string) => {
     try {
-      await clearRange(tabName, rangeToClear);
+      await clearRange(tabName, rangeToClear as any);
       const updatedData = await fetchData(tabName, range);
       setData(updatedData);
     } catch (error) {
-      setErrors(["Failed to clear range"]);
+      setErrors(["Failed to clear range"] as any);
     }
   };
 
