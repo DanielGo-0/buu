@@ -1,10 +1,10 @@
 // components/Page.js
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { Box, Button, Input, Select, Text } from "@chakra-ui/react";
+import { Box, Button, Input, Text } from "@chakra-ui/react";
 import { useJsApiLoader, Libraries } from "@react-google-maps/api";
 import { useSheetData } from "../hooks/useSheetData";
-import AutocompleteInput from "./autocompleteInput";
+import MultiSelect from "./multiselectmodal";
 
 const Page = ({ setMapCenter }: any) => {
   const tabName = "Hoja 2" as any;
@@ -27,7 +27,7 @@ const Page = ({ setMapCenter }: any) => {
     libraries,
   });
   function name(ix: any, vl: any) {
-    handleChange(4, vl);
+    handleChange(ix, vl);
   }
 
   useEffect(() => {
@@ -113,6 +113,19 @@ const Page = ({ setMapCenter }: any) => {
     "WILSON",
   ];
 
+  const brandOptions = options.map((brand) => ({
+    value: brand,
+    label: brand,
+  }));
+
+  const value = [
+    { value: "10%", label: "10 %" },
+    { value: "20%", label: "20 %" },
+    { value: "30%", label: "30 %" },
+    { value: "40%", label: "40 %" },
+    { value: "50%", label: "50 %" },
+  ];
+
   return (
     <Box
       style={{
@@ -125,6 +138,7 @@ const Page = ({ setMapCenter }: any) => {
       justifyContent={{ base: "center", md: "space-around" }}
       paddingX={{ base: "80px" }}
       pt={{ base: "100px", md: "40px" }}
+      pb={{ base: "100px" }}
     >
       <form
         style={{ padding: "40px 0" }}
@@ -146,21 +160,7 @@ const Page = ({ setMapCenter }: any) => {
             />
           </div>
         ))}
-        <Select
-          variant="outlined"
-          backgroundColor="white"
-          m="20px 0"
-          placeholder="Oferta %"
-          onChange={(e) => handleChange(2, e.target.value)}
-          value={newData[2]}
-          isRequired
-        >
-          <option value="10%">10 %</option>
-          <option value="20%">20 %</option>
-          <option value="30%">30 %</option>
-          <option value="40%">40 %</option>
-          <option value="50%">50 %</option>
-        </Select>
+        <MultiSelect handleValue={name} options={value} title={"Descuento"} />
         <Box m="20px 0">
           <label style={{ color: "white" }}>Modelos</label>
           <Input
@@ -172,7 +172,11 @@ const Page = ({ setMapCenter }: any) => {
             onChange={(e) => handleChange(3, e.target.value)}
           />
         </Box>
-        <AutocompleteInput options={options} handleValue={name} />
+        <MultiSelect
+          handleValue={name}
+          options={brandOptions}
+          title={"Marcas"}
+        />
 
         <Button mt="25px" type="submit" colorScheme="red" w="full">
           Añadir Item
