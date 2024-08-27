@@ -13,7 +13,7 @@ const HomePage = () => {
   return (
     <Box>
       <Nav />
-      {/* <MapWithAutocomplete mapCenter={mapCenter} /> */}
+      <MapWithAutocomplete mapCenter={mapCenter} />
       <Page setMapCenter={setMapCenter} />
     </Box>
   );
