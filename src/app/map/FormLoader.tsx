@@ -5,6 +5,7 @@ import { Box, Button, Input, Text } from "@chakra-ui/react";
 import { useJsApiLoader, Libraries } from "@react-google-maps/api";
 import { useSheetData } from "../hooks/useSheetData";
 import MultiSelect from "./multiselectmodal";
+import { brandOptions, value } from "./options";
 
 const Page = ({ setMapCenter }: any) => {
   const tabName = "Hoja 2" as any;
@@ -20,15 +21,33 @@ const Page = ({ setMapCenter }: any) => {
 
   const inputRef = useRef(null);
   const [address, setAddress] = useState("");
+  const [tienda, setTienda] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [sent, setSent] = useState(false);
+  const [modelos, setModelos] = useState("");
   const libraries: Libraries = ["places"];
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries,
   });
-  function name(ix: any, vl: any) {
+
+  const name = (ix: any, vl: any) => {
+    switch (ix) {
+      case 0:
+        setTienda(vl);
+        break;
+      case 1:
+        setDireccion(vl);
+        break;
+      case 2:
+        setModelos(vl);
+        break;
+      default:
+        break;
+    }
     handleChange(ix, vl);
-  }
+  };
 
   useEffect(() => {
     if (isLoaded && window.google) {
@@ -47,84 +66,22 @@ const Page = ({ setMapCenter }: any) => {
             lat: location.lat(),
             lng: location.lng(),
           });
-          setAddress(place.formatted_address || "");
+          setDireccion(place.formatted_address || "");
+          name(1, place.formatted_address || "");
         }
       });
     }
   }, [isLoaded, setMapCenter]);
 
-  const options = [
-    "ADDNICE",
-    "ADIDAS",
-    "ALPINE SKATE",
-    "ARGOLF",
-    "ASICS",
-    "ATHIX",
-    "ATOMIK",
-    "BABOLAT",
-    "BEST SOX",
-    "BODY",
-    "CAPSLAB",
-    "CARTAGO",
-    "CHAMPION",
-    "CONVERSE",
-    "CROCS",
-    "DAK",
-    "DIADORA",
-    "DRB",
-    "FILA",
-    "FLASH",
-    "FOOTY",
-    "HAVAIANAS",
-    "HEAD",
-    "HIFEL",
-    "IPANEMA",
-    "JACK LEE",
-    "JOHN FOOS",
-    "KAPPA",
-    "LA DOLFINA",
-    "LA GEAR",
-    "LACOSTE",
-    "LECOQ",
-    "MARISA",
-    "MITRE",
-    "MONTAGNE",
-    "NEW BALANCE",
-    "NIKE",
-    "OLYMPIKUS",
-    "OPORTUNIDADES",
-    "PENALTY",
-    "PONY",
-    "PROCER",
-    "PROFIT",
-    "PUMA",
-    "QUIKSILVER",
-    "REEBOK",
-    "REEF",
-    "REUSCH",
-    "REVES",
-    "SNAUWAERT",
-    "SPORT COMPLEMENT",
-    "SPORT SERVICES",
-    "TOPPER",
-    "UMBRO",
-    "UNDER ARMOUR",
-    "VANS",
-    "WILSON",
-  ];
-
-  const brandOptions = options.map((brand) => ({
-    value: brand,
-    label: brand,
-  }));
-
-  const value = [
-    { value: "10%", label: "10 %" },
-    { value: "20%", label: "20 %" },
-    { value: "30%", label: "30 %" },
-    { value: "40%", label: "40 %" },
-    { value: "50%", label: "50 %" },
-  ];
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit();
+    // Clear all inputs and selects after submission
+    setSent(true);
+    setTienda("");
+    setDireccion("");
+    setModelos("");
+  };
 
   return (
     <Box
@@ -140,27 +97,47 @@ const Page = ({ setMapCenter }: any) => {
       pt={{ base: "100px", md: "40px" }}
       pb={{ base: "100px" }}
     >
-      <form
-        style={{ padding: "40px 0" }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
-        {["Direccion", "Tienda"].map((label, index) => (
-          <div style={{ padding: "10px 0" }} key={index}>
-            <label style={{ color: "white" }}>{label}</label>
-            <Input
-              ref={label === "Direccion" ? inputRef : null}
-              mt="5px"
-              placeholder={label}
-              bg="white"
-              type="text"
-              onChange={(e) => handleChange(index, e.target.value)}
-            />
-          </div>
-        ))}
-        <MultiSelect handleValue={name} options={value} title={"Descuento"} />
+      <form style={{ padding: "40px 0" }} onSubmit={handleFormSubmit}>
+        <div style={{ padding: "10px 0" }}>
+          <label style={{ color: "white" }}>Tienda</label>
+          <Input
+            mt="5px"
+            placeholder="Tienda"
+            bg="white"
+            type="text"
+            value={tienda}
+            onChange={(e) => name(0, e.target.value)}
+          />
+        </div>
+
+        <div style={{ padding: "10px 0" }}>
+          <label style={{ color: "white" }}>Direccion</label>
+          <Input
+            ref={inputRef}
+            mt="5px"
+            placeholder="Direccion"
+            bg="white"
+            type="text"
+            value={direccion}
+            onChange={(e) => name(1, e.target.value)}
+          />
+        </div>
+
+        <MultiSelect
+          handleValue={name}
+          options={value}
+          title={"Descuento"}
+          sent={sent}
+          setSent={setSent}
+        />
+        <MultiSelect
+          handleValue={name}
+          options={brandOptions}
+          title={"Marcas"}
+          sent={sent}
+          setSent={setSent}
+        />
+
         <Box m="20px 0">
           <label style={{ color: "white" }}>Modelos</label>
           <Input
@@ -169,14 +146,10 @@ const Page = ({ setMapCenter }: any) => {
             bg="white"
             type="text"
             color="black"
-            onChange={(e) => handleChange(3, e.target.value)}
+            value={modelos}
+            onChange={(e) => name(3, e.target.value)}
           />
         </Box>
-        <MultiSelect
-          handleValue={name}
-          options={brandOptions}
-          title={"Marcas"}
-        />
 
         <Button mt="25px" type="submit" colorScheme="red" w="full">
           Añadir Item
